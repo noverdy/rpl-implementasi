@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::get('/', [Controller::class, 'index'])->name('index');
 
 Route::group(['middleware' => 'guest'], function () {
@@ -38,5 +39,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('create', [PraproposalController::class, 'create'])->name('create');
         Route::post('/', [PraproposalController::class, 'store'])->name('store');
         Route::get('status', [PraproposalController::class, 'status'])->name('status');
+        Route::get('/pdf', [PraproposalController::class, 'generatePDF'])->name('pdf');
     });
 });

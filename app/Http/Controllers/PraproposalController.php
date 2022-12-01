@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Praproposal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PraproposalController extends Controller
 {
@@ -62,6 +63,22 @@ class PraproposalController extends Controller
 
         return view('praproposal.status', [
             'status' => $status,
+            'praproposal' => $praproposal
+        ]);
+    }
+
+    /**
+     * Generate PDF from recently submitted Praproposal.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function generatePDF()
+    {
+        $praproposal = Auth::user()->praproposal()->latest('created_at')->first();
+        $pdf = Pdf::loadView('praproposal.pdf', $praproposal->toArray());
+        $pdf->set_base_path("/www/public/css/");
+        return $pdf->stream();
+        return view('praproposal.pdf', [
             'praproposal' => $praproposal
         ]);
     }
